@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["phuongnd08@gmail.com"]
   spec.description   = %q{A helper to launch redis server during test}
   spec.summary       = %q{A helper to launch redis server during test}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/phuongnd08/redis_test"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
