@@ -20,7 +20,7 @@ it for every project I use.
 
 Add this line to your application's Gemfile:
 
-    gem 'redis-test', require: 'redis/test'
+    gem 'redis_test'
 
 And then execute:
 
@@ -28,7 +28,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install redis-test
+    $ gem install redis_test
 
 ## Usage
 
