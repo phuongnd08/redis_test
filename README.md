@@ -75,12 +75,12 @@ end
 ```
 
 There is a `RedisTest.server_url` (which by default return
-"redis://localhost:9763") so you can use to configure your custom tool
+`"redis://localhost:9763"`) that you can use to configure your custom tool
 that use Redis
 
 ## For Parallel Testing
 You can start multiple instances of redis in parallel by rotating
-ENV['TEST_REDIS_PORT']
+`ENV['TEST_REDIS_PORT']`
 
 ## Contributing
 
