@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Redis::Test::VERSION
   spec.authors       = ["Phuong Nguyen"]
   spec.email         = ["phuongnd08@gmail.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{A helper to launch redis server during test}
+  spec.summary       = %q{A helper to launch redis server during test}
   spec.homepage      = ""
   spec.license       = "MIT"
 
