@@ -71,7 +71,7 @@ module RedisTest
       options.flatten.each do |option|
         case option
         when :default
-          Redis.current = Redis.new(server_url)
+          Redis.current = Redis.new(url: server_url)
 
         when :sidekiq
           Sidekiq.configure_server do |config|
