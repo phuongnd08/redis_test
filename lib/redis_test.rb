@@ -1,29 +1,40 @@
 require "redis_test/version"
 
 module RedisTest
-  PIDS_PATH = "#{Rails.root}/tmp/pids"
-  REDIS_PID = "#{PIDS_PATH}/redis-test.pid"
-  REDIS_CACHE_PATH = "#{Rails.root}/tmp/cache/"
-  REDIS_DB_FILENAME = "#{Rails.root}/tmp/dump.rdb"
-
   class << self
-    def redis_port
+    def port
       (ENV['TEST_REDIS_PORT'] || 9736).to_i
     end
 
+    def db_filename
+      "redis-test-#{port}.rdb"
+    end
+
+    def cache_path
+      "#{Rails.root}/tmp/cache/#{port}/"
+    end
+
+    def pids_path
+      "#{Rails.root}/tmp/pids"
+    end
+
+    def pidfile
+      "#{pids_path}/redis-test-#{port}.pid"
+    end
+
     def start
-      FileUtils.mkdir_p REDIS_CACHE_PATH
-      FileUtils.mkdir_p PIDS_PATH
+      FileUtils.mkdir_p cache_path
+      FileUtils.mkdir_p pids_path
       redis_options = {
         "daemonize"     => 'yes',
-        "pidfile"       => REDIS_PID,
-        "port"          => redis_port,
+        "pidfile"       => pidfile,
+        "port"          => port,
         "timeout"       => 300,
         "save 900"      => 1,
         "save 300"      => 1,
         "save 60"       => 10000,
-        "dbfilename"    => REDIS_DB_FILENAME,
-        "dir"           => REDIS_CACHE_PATH,
+        "dbfilename"    => db_filename,
+        "dir"           => cache_path,
         "loglevel"      => "debug",
         "logfile"       => "stdout",
         "databases"     => 16
@@ -33,7 +44,7 @@ module RedisTest
 
       wait_time_remaining = 5
       begin
-        TCPSocket.open("localhost", redis_port)
+        TCPSocket.open("localhost", port)
         success = true
       rescue Exception => e
         if wait_time_remaining > 0
@@ -47,8 +58,8 @@ module RedisTest
 
     def stop
       %x{
-        cat #{REDIS_PID} | xargs kill -QUIT
-        rm -f #{REDIS_CACHE_PATH}#{REDIS_DB_FILENAME}
+        cat #{pidfile} | xargs kill -QUIT
+        rm -f #{cache_path}#{db_filename}
       }
     end
 
