@@ -1,18 +1,19 @@
-# Redis::Test
+# RedisTest
 
-This is a super simple gems to help start/stop an instance of test redis
-server during test.
+This is a very simple gem to help start/stop an instance of redis server
+during test.
 
 There is different option out there like fakeredis but I dislike this
 approach as it require the gem to re-implement all the functionality of
 redis.
 
-My approach is super simple, and may be already widely used:
+My approach is very simple, and may be already widely used:
 Start a redis server on port 9736 (can be
 customized by setting ENV['TEST_REDIS_PORT']) and simply change your
 config so your redis client will connect there during test instead.
 
-I just try to package it in a convenient way :)
+I just try to package it in a convenient way so I don't have to repeat
+it for every project I use.
 
 ## Installation
 
@@ -30,47 +31,55 @@ Or install it yourself as:
 
 ## Usage
 
-You can use it with RSpec: (put this in spec/support/)
-
+You can use it with RSpec by putting this block under your spec/support:
 
 ```
 RSpec.configure do |config|
   config.before(:suite) do
-    Redis::Test.start
-    Redis.current = Redis.new("redis://localhost:9736")
-    # If you use sidekiq, you need to config redis for sidekiq as well
-    # Sidekiq.configure_server do |config|
-    #   config.redis = { url: 'redis://localhost:9736', namespace: 'mynamespace' }
-    # end
-
-    # Sidekiq.configure_client do |config|
-    #   config.redis = { url: 'redis://localhost:9736', namespace: 'mynamespace' }
-    # end
+    RedisTest.start
+    RedisTest.configure(:default, :sidekiq, :ohm)
+    # RedisTest provide common configuration for :default (set
+    # Redis.current), :sidekiq, :ohm and :resque.
   end
 
-  config.before(:each) do
-    Redis::Test.clear
+  config.after(:each) do
+    RedisTest.clear
+    # notice that will flush the Redis db, so it's less
+    # desirable to put that in a config.before(:each) since it may clean any
+    # data that you try to put in redis prior to that
   end
 
   config.after(:suite) do
-    Redis::Test.stop
+    RedisTest.stop
   end
 end
 ```
 
-Or Cucumber: (put this in features/support/)
-```
-Redis::Test.start # start this when cucumber load
+Or with Cucumber by putting this block under your features/support:
 
-Before do
-  Redis::Test.clear
+```
+RedisTest.start # start this when cucumber load
+RedisTest.configure(:default, :sidekiq, :ohm)
+# available option: :default, :sidekiq, :ohm, :resque
+
+After do
+  RedisTest.clear
+  # clear redis after every scenario to avoid interference
 end
 
 at_exit do
-  Redis::Test.stop
+  RedisTest.stop
 end
 
 ```
+
+There is a `RedisTest.server_url` (which by default return
+"redis://localhost:9763") so you can use to configure your custom tool
+that use Redis
+
+## For Parallel Testing
+You can start multiple instances of redis in parallel by rotating
+ENV['TEST_REDIS_PORT']
 
 ## Contributing
 
