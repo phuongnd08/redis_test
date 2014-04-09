@@ -3,13 +3,14 @@
 This is a very simple gem to help start/stop an instance of redis server
 during test.
 
-There is different option out there like fakeredis but I dislike this
-approach as it require the gem to re-implement all the functionality of
-redis.
+There is different option out there like fakeredis but I dislike
+fakeredis approach as it require the gem to re-implement all the
+functionality of redis, so every time redis is upgrading, the gem
+need to be updated as well.
 
 My approach is very simple, and may be already widely used:
 Start a redis server on port 9736 (can be
-customized by setting ENV['TEST_REDIS_PORT']) and simply change your
+customized by setting `ENV['TEST_REDIS_PORT']`) and simply change your
 config so your redis client will connect there during test instead.
 
 I just try to package it in a convenient way so I don't have to repeat
