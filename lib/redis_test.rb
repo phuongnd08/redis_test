@@ -63,6 +63,39 @@ module RedisTest
       }
     end
 
+    def server_url
+      "redis://localhost:#{port}"
+    end
+
+    def configure(*options)
+      options.flatten.each do |option|
+        case option
+        when :default
+          Redis.current = Redis.new(server_url)
+
+        when :sidekiq
+          Sidekiq.configure_server do |config|
+            config.redis = { url: server_url, namespace: 'sidekiq' }
+          end
+
+          Sidekiq.configure_client do |config|
+            config.redis = { url: server_url, namespace: 'sidekiq' }
+          end
+
+        when :ohm
+          Ohm.redis = Redic.new(server_url)
+
+        when :resque
+          Resque.configure do |config|
+            config.redis = "#{server_url}/resque"
+          end
+
+        else
+          raise "Unable to configure #{option}"
+        end
+      end
+    end
+
     def clear
       Redis.current.flushdb
     end
