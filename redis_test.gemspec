@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'redis/test/version'
+require 'redis_test/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "redis-test"
-  spec.version       = Redis::Test::VERSION
+  spec.name          = "redis_test"
+  spec.version       = RedisTest::VERSION
   spec.authors       = ["Phuong Nguyen"]
   spec.email         = ["phuongnd08@gmail.com"]
   spec.description   = %q{A helper to launch redis server during test}
