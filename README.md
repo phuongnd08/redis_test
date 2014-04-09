@@ -34,7 +34,7 @@ Or install it yourself as:
 
 You can use it with RSpec by putting this block under your spec/support:
 
-```
+```ruby
 RSpec.configure do |config|
   config.before(:suite) do
     RedisTest.start
@@ -58,7 +58,7 @@ end
 
 Or with Cucumber by putting this block under your features/support:
 
-```
+```ruby
 RedisTest.start # start this when cucumber load
 RedisTest.configure(:default, :sidekiq, :ohm)
 # available option: :default, :sidekiq, :ohm, :resque
