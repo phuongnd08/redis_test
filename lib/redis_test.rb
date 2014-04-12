@@ -30,13 +30,8 @@ module RedisTest
         "pidfile"       => pidfile,
         "port"          => port,
         "timeout"       => 300,
-        "save 900"      => 1,
-        "save 300"      => 1,
-        "save 60"       => 10000,
         "dbfilename"    => db_filename,
         "dir"           => cache_path,
-        "loglevel"      => "debug",
-        "logfile"       => "stdout",
         "databases"     => 16
       }.map { |k, v| "#{k} #{v}" }.join('\n')
       `echo '#{redis_options}' | redis-server -`
