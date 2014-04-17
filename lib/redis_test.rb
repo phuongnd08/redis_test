@@ -49,6 +49,8 @@ module RedisTest
           raise "Cannot start redis server in 5 seconds. Pinging server yield\n#{e.inspect}"
         end
       end while(!success)
+
+      ENV['REDIS_URL'] = server_url
     end
 
     def stop
@@ -66,7 +68,7 @@ module RedisTest
       options.flatten.each do |option|
         case option
         when :default
-          Redis.current = Redis.new(url: server_url)
+          Redis.current = Redis.new
 
         when :sidekiq
           Sidekiq.configure_server do |config|
