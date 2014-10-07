@@ -75,7 +75,7 @@ end
 ```
 
 There is a `RedisTest.server_url` (which by default return
-`"redis://localhost:9763"`) that you can use to configure your custom tool
+`"redis://localhost:9736"`) that you can use to configure your custom tool
 that use Redis
 
 ## For Parallel Testing
