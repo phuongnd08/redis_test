@@ -38,9 +38,9 @@ You can use it with RSpec by putting this block under your spec/support:
 RSpec.configure do |config|
   config.before(:suite) do
     RedisTest.start
-    RedisTest.configure(:default, :sidekiq, :ohm)
+    RedisTest.configure(:default, :sidekiq)
     # RedisTest provide common configuration for :default (set
-    # Redis.current), :sidekiq, :ohm and :resque.
+    # Redis.current), :sidekiq, :ohm (set Ohm.redis) and :resque.
   end
 
   config.after(:each) do
@@ -60,7 +60,7 @@ Or with Cucumber by putting this block under your features/support:
 
 ```ruby
 RedisTest.start # start this when cucumber load
-RedisTest.configure(:default, :sidekiq, :ohm)
+RedisTest.configure(:default, :sidekiq)
 # available option: :default, :sidekiq, :ohm, :resque
 
 After do
