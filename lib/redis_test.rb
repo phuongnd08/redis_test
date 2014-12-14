@@ -25,6 +25,7 @@ module RedisTest
     def start
       FileUtils.mkdir_p cache_path
       FileUtils.mkdir_p pids_path
+
       redis_options = {
         "daemonize"     => 'yes',
         "pidfile"       => pidfile,
@@ -39,7 +40,8 @@ module RedisTest
 
       wait_time_remaining = 5
       begin
-        TCPSocket.open("localhost", port)
+        socket = TCPSocket.open("localhost", port)
+        socket.puts "flushall"
         success = true
       rescue Exception => e
         if wait_time_remaining > 0
