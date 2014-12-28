@@ -82,6 +82,11 @@ that use Redis
 You can start multiple instances of redis in parallel by rotating
 `ENV['TEST_REDIS_PORT']`
 
+## Log information
+All log will be available at log/redis.PORT.log
+The default log level is `debug`, which will dump a lot of log.
+Customize your loglevel by setting RedisTest.loglevel to `debug`, `verbose`,
+`notice` or `warning`. See https://raw.githubusercontent.com/antirez/redis/2.8/redis.conf for explanation regarding redis log level
 ## Contributing
 
 1. Fork it
