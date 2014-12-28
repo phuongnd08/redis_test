@@ -22,6 +22,10 @@ module RedisTest
       "#{pids_path}/redis-test-#{port}.pid"
     end
 
+    def logfile
+      "#{Rails.root}/log/redis.#{port}.log"
+    end
+
     def start
       FileUtils.mkdir_p cache_path
       FileUtils.mkdir_p pids_path
@@ -29,6 +33,7 @@ module RedisTest
       redis_options = {
         "daemonize"     => 'yes',
         "pidfile"       => pidfile,
+        "logfile"       => logfile,
         "port"          => port,
         "timeout"       => 300,
         "dbfilename"    => db_filename,
@@ -36,7 +41,6 @@ module RedisTest
         "databases"     => 16
       }.map { |k, v| "#{k} #{v}" }.join('\n')
       `echo '#{redis_options}' | redis-server -`
-
 
       wait_time_remaining = 5
       begin
