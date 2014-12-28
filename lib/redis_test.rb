@@ -26,6 +26,14 @@ module RedisTest
       "#{Rails.root}/log/redis.#{port}.log"
     end
 
+    def loglevel
+      @loglevel || "debug"
+    end
+
+    def loglevel=(level)
+      @loglevel = level
+    end
+
     def start
       FileUtils.mkdir_p cache_path
       FileUtils.mkdir_p pids_path
@@ -38,6 +46,7 @@ module RedisTest
         "timeout"       => 300,
         "dbfilename"    => db_filename,
         "dir"           => cache_path,
+        "loglevel"      => loglevel,
         "databases"     => 16
       }.map { |k, v| "#{k} #{v}" }.join('\n')
       `echo '#{redis_options}' | redis-server -`
