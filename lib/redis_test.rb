@@ -11,11 +11,11 @@ module RedisTest
     end
 
     def cache_path
-      "#{Rails.root}/tmp/cache/#{port}/"
+      "#{Dir.pwd}/tmp/cache/#{port}/"
     end
 
     def pids_path
-      "#{Rails.root}/tmp/pids"
+      "#{Dir.pwd}/tmp/pids"
     end
 
     def pidfile
@@ -23,7 +23,7 @@ module RedisTest
     end
 
     def logfile
-      "#{Rails.root}/log/redis.#{port}.log"
+      "#{Dir.pwd}/log/redis.#{port}.log"
     end
 
     def loglevel
