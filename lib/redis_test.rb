@@ -18,12 +18,16 @@ module RedisTest
       "#{Dir.pwd}/tmp/pids"
     end
 
+    def logs_path
+      "#{Dir.pwd}/log"
+    end
+
     def pidfile
       "#{pids_path}/redis-test-#{port}.pid"
     end
 
     def logfile
-      "#{Dir.pwd}/log/redis.#{port}.log"
+      "#{logs_path}/redis.#{port}.log"
     end
 
     def loglevel
@@ -37,6 +41,7 @@ module RedisTest
     def start
       FileUtils.mkdir_p cache_path
       FileUtils.mkdir_p pids_path
+      FileUtils.mkdir_p logs_path
 
       redis_options = {
         "daemonize"     => 'yes',
