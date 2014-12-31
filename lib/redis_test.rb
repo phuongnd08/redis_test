@@ -58,7 +58,7 @@ module RedisTest
 
       wait_time_remaining = 5
       begin
-        socket = TCPSocket.open("localhost", port)
+        self.socket = TCPSocket.open("localhost", port)
         socket.puts "flushall"
         success = true
       rescue Exception => e
@@ -114,7 +114,10 @@ module RedisTest
     end
 
     def clear
-      Redis.current.flushdb
+      socket.puts("flushall")
     end
+
+    private
+    attr_accessor :socket
   end
 end
