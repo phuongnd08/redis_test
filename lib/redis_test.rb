@@ -59,7 +59,7 @@ module RedisTest
       wait_time_remaining = 5
       begin
         self.socket = TCPSocket.open("localhost", port)
-        socket.puts "flushall"
+        clear
         success = true
       rescue Exception => e
         if wait_time_remaining > 0
@@ -115,6 +115,7 @@ module RedisTest
 
     def clear
       socket.puts("flushall")
+      socket.gets # wait for redis server to reply with "OK"
     end
 
     private
