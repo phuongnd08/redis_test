@@ -74,10 +74,9 @@ module RedisTest
     end
 
     def stop
-      %x{
-        cat #{pidfile} | xargs kill -QUIT
-        rm -f #{cache_path}#{db_filename}
-      }
+      pid = File.read(pidfile).to_i
+      Process.kill("QUIT", pid)
+      FileUtils.rm_f("#{cache_path}#{db_filename}")
     end
 
     def server_url
