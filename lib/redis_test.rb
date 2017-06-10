@@ -90,7 +90,7 @@ module RedisTest
         case option
         when :default
           Redis.current = Redis.new
-
+          RedisClassy.redis = Redis.current if defined? RedisClassy
         when :sidekiq
           Sidekiq.configure_server do |config|
             config.redis = { url: server_url, namespace: 'sidekiq' }
