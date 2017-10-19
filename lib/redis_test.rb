@@ -3,7 +3,7 @@ require "redis_test/version"
 module RedisTest
   class << self
     def port
-      (ENV['TEST_REDIS_PORT'] || 9736).to_i
+      (ENV['TEST_REDIS_PORT'] || find_available_port).to_i
     end
 
     def db_filename
@@ -117,6 +117,13 @@ module RedisTest
     def clear
       socket.puts("flushall")
       socket.gets # wait for redis server to reply with "OK"
+    end
+
+    def find_available_port
+      server = TCPServer.new("127.0.0.1", 0)
+      server.addr[1]
+    ensure
+      server.close if server
     end
 
     private
