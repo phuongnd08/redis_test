@@ -6,6 +6,11 @@ module RedisTest
       (ENV['TEST_REDIS_PORT'] || find_available_port).to_i
     end
 
+    def redis_server_command
+      ENV['TEST_REDIS_SERVER_COMMAND'] || "redis-server"
+    end
+
+
     def db_filename
       "redis-test-#{port}.rdb"
     end
@@ -54,7 +59,9 @@ module RedisTest
         "loglevel"      => loglevel,
         "databases"     => 16
       }.map { |k, v| "#{k} #{v}" }.join('\n')
-      `echo '#{redis_options}' | redis-server -`
+
+      `echo '#{redis_options}' | '#{redis_server_command}' -`
+
 
       wait_time_remaining = 5
       begin
