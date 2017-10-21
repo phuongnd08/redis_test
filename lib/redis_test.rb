@@ -3,7 +3,7 @@ require "redis_test/version"
 module RedisTest
   class << self
     def port
-      (ENV['TEST_REDIS_PORT'] || find_available_port).to_i
+      @port ||= (ENV['TEST_REDIS_PORT'] || find_available_port).to_i
     end
 
     def db_filename
