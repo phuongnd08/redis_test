@@ -1,4 +1,5 @@
 require "redis_test/version"
+require 'socket'
 
 module RedisTest
   class << self
