@@ -47,15 +47,22 @@ module RedisTest
       redis_options = {
         "daemonize"     => 'yes',
         "pidfile"       => pidfile,
-        "logfile"       => log_to_stdout ? "" : logfile,
         "port"          => port,
         "timeout"       => 300,
         "dbfilename"    => db_filename,
         "dir"           => cache_path,
         "loglevel"      => loglevel,
         "databases"     => 16
-      }.map { |k, v| "#{k} #{v}" }.join('\n')
-      `echo '#{redis_options}' | redis-server -`
+      }
+
+      unless log_to_stdout
+        redis_options.merge!(
+          "logfile"       => logfile,
+        )
+      end
+
+      redis_options_str = redis_options.map { |k, v| "#{k} #{v}" }.join('\n')
+      `echo '#{redis_options_str}' | redis-server -`
 
       wait_time_remaining = 5
       begin
@@ -77,7 +84,12 @@ module RedisTest
     def stop
       if File.file?(pidfile) && File.readable?(pidfile)
         pid = File.read(pidfile).to_i
-        Process.kill("QUIT", pid) if pid > 0
+        if pid > 0
+          Process.kill("QUIT", pid)
+          until (Process.getpgid(pid) rescue nil).nil? do
+            sleep 0.01
+          end
+        end
       end
       FileUtils.rm_f("#{cache_path}#{db_filename}")
     end

@@ -18,3 +18,5 @@ tmp
 vendor/
 .idea/
 binstubs/
+log/
+.byebug_*
