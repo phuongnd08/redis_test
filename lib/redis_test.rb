@@ -39,7 +39,7 @@ module RedisTest
       @loglevel = level
     end
 
-    def start
+    def start(log_to_stdout: false)
       FileUtils.mkdir_p cache_path
       FileUtils.mkdir_p pids_path
       FileUtils.mkdir_p logs_path
@@ -47,7 +47,7 @@ module RedisTest
       redis_options = {
         "daemonize"     => 'yes',
         "pidfile"       => pidfile,
-        "logfile"       => logfile,
+        "logfile"       => log_to_stdout ? "" : logfile,
         "port"          => port,
         "timeout"       => 300,
         "dbfilename"    => db_filename,

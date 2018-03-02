@@ -37,7 +37,8 @@ You can use it with RSpec by putting this block under your spec/support:
 ```ruby
 RSpec.configure do |config|
   config.before(:suite) do
-    RedisTest.start
+    RedisTest.start(log_to_stdout: true)
+    # if log_to_stdout ommited it will logs to file
     RedisTest.configure(:default, :sidekiq)
     # RedisTest provide common configuration for :default (set
     # Redis.current), :sidekiq, :ohm (set Ohm.redis) and :resque.
