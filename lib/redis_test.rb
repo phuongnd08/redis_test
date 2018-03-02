@@ -45,7 +45,6 @@ module RedisTest
       FileUtils.mkdir_p logs_path
 
       redis_options = {
-        "daemonize"     => 'yes',
         "pidfile"       => pidfile,
         "port"          => port,
         "timeout"       => 300,
@@ -62,7 +61,10 @@ module RedisTest
       end
 
       redis_options_str = redis_options.map { |k, v| "#{k} #{v}" }.join('\n')
-      `echo '#{redis_options_str}' | redis-server -`
+
+      fork do
+        system "echo '#{redis_options_str}' | redis-server -"
+      end
 
       wait_time_remaining = 5
       begin
