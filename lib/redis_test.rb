@@ -70,7 +70,7 @@ module RedisTest
       begin
         self.socket = TCPSocket.open("localhost", port)
         clear
-        success = true
+        @started = true
       rescue Exception => e
         if wait_time_remaining > 0
           wait_time_remaining -= 0.1
@@ -78,9 +78,13 @@ module RedisTest
         else
           raise "Cannot start redis server in 5 seconds. Pinging server yield\n#{e.inspect}"
         end
-      end while(!success)
+      end while(!@started)
 
       ENV['REDIS_URL'] = server_url
+    end
+
+    def started?
+      @started
     end
 
     def stop
@@ -94,6 +98,7 @@ module RedisTest
         end
       end
       FileUtils.rm_f("#{cache_path}#{db_filename}")
+      @started = false
     end
 
     def server_url
