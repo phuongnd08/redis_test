@@ -41,7 +41,7 @@ RSpec.configure do |config|
     # if log_to_stdout ommited it will logs to file
     RedisTest.configure(:default, :sidekiq)
     # RedisTest provide common configuration for :default (set
-    # Redis.current), :sidekiq, :ohm (set Ohm.redis) and :resque.
+    # Redis.current + ENV['REDIS_URL']), :sidekiq, :ohm (set Ohm.redis) and :resque.
   end
 
   config.after(:each) do
