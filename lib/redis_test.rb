@@ -3,8 +3,17 @@ require 'socket'
 
 module RedisTest
   class << self
+    def find_port
+      @port ||= (ENV["TEST_REDIS_PORT"] || find_available_port).to_i
+    end
+
+    def uri
+      url = ENV["TEST_REDIS_URL"] || "redis://localhost:#{find_port}"
+      URI(url)
+    end
+
     def port
-      @port ||= (ENV['TEST_REDIS_PORT'] || find_available_port).to_i
+      uri.port
     end
 
     def db_filename
@@ -68,7 +77,7 @@ module RedisTest
 
       wait_time_remaining = 5
       begin
-        self.socket = TCPSocket.open("localhost", port)
+        self.socket = TCPSocket.open(uri.host, port)
         clear
         @started = true
       rescue Exception => e
@@ -100,7 +109,7 @@ module RedisTest
     end
 
     def server_url
-      "redis://localhost:#{port}"
+      uri.to_s
     end
 
     def configure(*options)

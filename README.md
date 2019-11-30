@@ -12,6 +12,7 @@ My approach is very simple, and may be already widely used:
 Start a redis server on port 9736 (can be
 customized by setting `ENV['TEST_REDIS_PORT']`) and simply change your
 config so your redis client will connect there during test instead.
+It's possible to custom the whole url via `ENV["TEST_REDIS_URL"]` also
 
 I just try to package it in a convenient way so I don't have to repeat
 it for every project I use.
