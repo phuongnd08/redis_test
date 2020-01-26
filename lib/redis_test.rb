@@ -1,4 +1,6 @@
-require "redis_test/version"
+# frozen_string_literal: true
+
+require 'redis_test/version'
 require 'socket'
 
 module RedisTest
@@ -32,12 +34,10 @@ module RedisTest
     end
 
     def loglevel
-      @loglevel || "debug"
+      @loglevel || 'debug'
     end
 
-    def loglevel=(level)
-      @loglevel = level
-    end
+    attr_writer :loglevel
 
     def start(log_to_stdout: false)
       FileUtils.mkdir_p cache_path
@@ -45,20 +45,16 @@ module RedisTest
       FileUtils.mkdir_p logs_path
 
       redis_options = {
-        "pidfile"       => pidfile,
-        "port"          => port,
-        "timeout"       => 300,
-        "dbfilename"    => db_filename,
-        "dir"           => cache_path,
-        "loglevel"      => loglevel,
-        "databases"     => 16
+        'pidfile' => pidfile,
+        'port' => port,
+        'timeout' => 300,
+        'dbfilename' => db_filename,
+        'dir' => cache_path,
+        'loglevel' => loglevel,
+        'databases' => 16
       }
 
-      unless log_to_stdout
-        redis_options.merge!(
-          "logfile"       => logfile,
-        )
-      end
+      redis_options['logfile'] = logfile unless log_to_stdout
 
       redis_options_str = redis_options.map { |k, v| "#{k} #{v}" }.join('\n')
 
@@ -69,7 +65,7 @@ module RedisTest
 
       wait_time_remaining = 5
       begin
-        self.socket = TCPSocket.open("localhost", port)
+        self.socket = TCPSocket.open('localhost', port)
         clear
         @started = true
       rescue Exception => e
@@ -90,8 +86,12 @@ module RedisTest
       if File.file?(pidfile) && File.readable?(pidfile)
         pid = File.read(pidfile).to_i
         if pid > 0
-          Process.kill("QUIT", pid)
-          until (Process.getpgid(pid) rescue nil).nil? do
+          Process.kill('SIGTERM', pid)
+          until (begin
+                   Process.getpgid(pid)
+                 rescue StandardError
+                   nil
+                 end).nil?
             sleep 0.01
           end
         end
@@ -135,18 +135,19 @@ module RedisTest
     end
 
     def clear
-      socket.puts("flushall")
+      socket.puts('flushall')
       socket.gets # wait for redis server to reply with "OK"
     end
 
     def find_available_port
-      server = TCPServer.new("127.0.0.1", 0)
+      server = TCPServer.new('127.0.0.1', 0)
       server.addr[1]
     ensure
-      server.close if server
+      server&.close
     end
 
     private
+
     attr_accessor :socket
 
     def mac?
