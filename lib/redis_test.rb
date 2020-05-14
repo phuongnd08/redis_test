@@ -59,8 +59,7 @@ module RedisTest
       redis_options_str = redis_options.map { |k, v| "#{k} #{v}" }.join('\n')
 
       fork do
-        echo_command = mac? ? 'echo' : 'echo -e'
-        system "#{echo_command} '#{redis_options_str}' | redis-server -"
+        system "echo '#{redis_options_str}' | redis-server -"
       end
 
       wait_time_remaining = 5
@@ -149,9 +148,5 @@ module RedisTest
     private
 
     attr_accessor :socket
-
-    def mac?
-      `uname`.downcase.include?('darwin')
-    end
   end
 end
