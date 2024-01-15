@@ -57,9 +57,9 @@ module RedisTest
       redis_options['logfile'] = logfile unless log_to_stdout
 
       redis_options_str = redis_options.map { |k, v| "#{k} #{v}" }.join('\n')
-
+      echo_command = mac? || ubuntu? ? 'echo' : 'echo -e'
       fork do
-        system "echo '#{redis_options_str}' | redis-server -"
+        system "#{echo_command} '#{redis_options_str}' | redis-server -"
       end
 
       wait_time_remaining = 5
@@ -146,6 +146,20 @@ module RedisTest
     end
 
     private
+    def linux?
+      `uname`.downcase.include?("linux")
+    end
+
+    def ubuntu?
+      return false unless linux?
+      return false unless File.exist?('/etc/os-release')
+      os_info = File.read('/etc/os-release')
+      os_info.include?("ubuntu")
+    end
+
+    def mac?
+      `uname`.downcase.include?('darwin')
+    end
 
     attr_accessor :socket
   end
